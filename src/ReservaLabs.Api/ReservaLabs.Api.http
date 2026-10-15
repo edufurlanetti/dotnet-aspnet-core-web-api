@@ -1,0 +1,45 @@
+@base = http://localhost:5000/api
+
+### Laboratórios com capacidade mínima de 30 lugares
+GET {{base}}/laboratorios?capacidadeMinima=30
+
+### Cria reserva (ajuste a data para o futuro)
+POST {{base}}/reservas
+Content-Type: application/json
+
+{
+  "laboratorioId": 1,
+  "responsavel": "Prof. Eduardo Furlanetti",
+  "disciplina": "Banco de Dados I",
+  "inicio": "2026-11-10T19:00:00",
+  "fim": "2026-11-10T22:30:00",
+  "quantidadeAlunos": 35
+}
+
+### Conflito de horário (422)
+POST {{base}}/reservas
+Content-Type: application/json
+
+{
+  "laboratorioId": 1,
+  "responsavel": "Prof. Ana",
+  "disciplina": "Redes de Computadores",
+  "inicio": "2026-11-10T21:00:00",
+  "fim": "2026-11-10T23:00:00",
+  "quantidadeAlunos": 20
+}
+
+### Dados inválidos (400)
+POST {{base}}/reservas
+Content-Type: application/json
+
+{ "responsavel": "A", "quantidadeAlunos": 0 }
+
+### Reservas de um laboratório em uma data
+GET {{base}}/reservas?laboratorioId=1&data=2026-11-10
+
+### Ocupação do laboratório no dia
+GET {{base}}/laboratorios/1/ocupacao?data=2026-11-10
+
+### Cancela a reserva 1
+DELETE {{base}}/reservas/1
